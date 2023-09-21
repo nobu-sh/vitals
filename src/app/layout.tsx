@@ -5,7 +5,7 @@ import { Nunito } from 'next/font/google'
 const nunito = Nunito({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'My Vitals',
+  title: 'Nobu Vitals',
 }
 
 export default function RootLayout({

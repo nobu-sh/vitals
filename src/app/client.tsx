@@ -13,8 +13,8 @@ export interface Heartbeat {
 }
 
 // Convert timestamp to time ago eg: 12s, 12m, 12h, 12d, 12w, 12m, 12y
-function toRelativeTime(timestamp: number) {
-  const diff = Date.now() - timestamp
+function toRelativeTime(timestamp: number, currentDate = Date.now()) {
+  const diff = currentDate - timestamp
   if (diff < 60 * 1000) {
     return `${Math.floor(diff / 1000)}s`
   } else if (diff < 60 * 60 * 1000) {
@@ -38,8 +38,10 @@ export default function Client({ initialHeartbeat }: { initialHeartbeat: Heartbe
   const [muted, setMuted] = useState(true)
   const audio = useRef<HTMLAudioElement>(null)
   
+  const [date, setDate] = useState<number>(Date.now())
+  
   const updateHeartbeat = useCallback(async () => {
-    const res = await fetch('https://health.nobu.sh/')
+    const res = await fetch('https://health.nobu.sh/', { cache: 'no-cache' })
     const data = await res.json() as Heartbeat
     setHeartbeat(data)
     if (data.timestamp < Date.now() - 12 * 60 * 60 * 1000) {
@@ -56,6 +58,15 @@ export default function Client({ initialHeartbeat }: { initialHeartbeat: Heartbe
     }, 10000)
     return () => clearInterval(interval)
   }, [updateHeartbeat])
+  
+  // Fix react minified error #425
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDate(Date.now())
+    }, 1000)
+    
+    return () => clearTimeout(timeout)
+  }, [date])
   
   // Handles the audio
   useEffect(() => {
@@ -95,7 +106,7 @@ export default function Client({ initialHeartbeat }: { initialHeartbeat: Heartbe
         <div className={`${styles.Circle} z-10 absolute w-full h-full rounded-full border-2 border-neutral-700 border-dashed`} />
         <div className="absolute z-30">
           <p className='font-bold sm:text-3xl text-xl text-center mt-5'>{heartbeat.bpm} bpm</p>
-          <p className='text-center opacity-90 sm:text-base text-xs'>{toRelativeTime(heartbeat.timestamp)} ago</p>
+          <p className='text-center opacity-90 sm:text-base text-xs'>{toRelativeTime(heartbeat.timestamp, date)} ago</p>
         </div>
       </div>
       <div className={`${styles.Line} absolute h-[100vh] top-[-50vh]`}></div>
