@@ -58,16 +58,19 @@ export default function Client({ initialHeartbeat }: { initialHeartbeat: Heartbe
   useEffect(() => {
     const timeout = setTimeout(() => {
       setDate(Date.now())
-      
-      if (data.timestamp < Date.now() - 12 * 60 * 60 * 1000) {
-        setDead(true)
-      } else {
-        setDead(false)
-      }
     }, 1000)
     
     return () => clearTimeout(timeout)
   }, [date])
+  
+  // Handles dead state
+  useEffect(() => {
+    if (heartbeat.timestamp < date - 12 * 60 * 60 * 1000) {
+      setDead(true)
+    } else {
+      setDead(false)
+    }
+  }, [heartbeat, date])
   
   // Handles the audio
   useEffect(() => {
