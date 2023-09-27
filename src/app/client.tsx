@@ -44,11 +44,6 @@ export default function Client({ initialHeartbeat }: { initialHeartbeat: Heartbe
     const res = await fetch('https://health.nobu.sh/', { cache: 'no-cache' })
     const data = await res.json() as Heartbeat
     setHeartbeat(data)
-    if (data.timestamp < Date.now() - 12 * 60 * 60 * 1000) {
-      setDead(true)
-    } else {
-      setDead(false)
-    }
   }, [])
   
   // Fetch api every 10 seconds
@@ -63,6 +58,12 @@ export default function Client({ initialHeartbeat }: { initialHeartbeat: Heartbe
   useEffect(() => {
     const timeout = setTimeout(() => {
       setDate(Date.now())
+      
+      if (data.timestamp < Date.now() - 12 * 60 * 60 * 1000) {
+        setDead(true)
+      } else {
+        setDead(false)
+      }
     }, 1000)
     
     return () => clearTimeout(timeout)
