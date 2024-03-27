@@ -103,7 +103,7 @@ export default function Client({ initialHeartbeat }: { initialHeartbeat: Heartbe
           : <Volume className='absolute top-4 right-4 w-8 h-8 stroke-neutral-500 cursor-pointer' strokeWidth={1} onClick={() => setMuted(true)} />
       }
       <div className="relative sm:w-[32rem] sm:h-[32rem] w-[16rem] h-[16rem] flex justify-center items-center">
-      <h1 className={`absolute z-40 font-bold text-xl top-20 right-14 rotate-[30deg] text-neutral-500 ${dead ? 'opacity-100' : 'opacity-0'} transition-opacity`}>I am possibly dead..?</h1>
+      <h1 className={`absolute z-40 font-bold sm:text-xl text-sm top-10 right-3 sm:top-20 sm:right-14 rotate-[30deg] text-neutral-500 ${dead ? 'opacity-100' : 'opacity-0'} transition-opacity`}>I am possibly dead..?</h1>
         <Heart className={`${styles.Heart} sm:w-[20rem] sm:h-[20rem] w-[10rem] h-[10rem] mt-[1.2rem] relative z-20`} style={{
           animationDuration: `${(60 / heartbeat.bpm).toFixed(2)}s`
         }} />
