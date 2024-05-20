@@ -57,7 +57,10 @@ export const SocketProvider = ({ children, initialHeartbeat }: PropsWithChildren
       }
       
       const message = JSON.parse(payload.join(':'))
-      setHeartbeat(message)
+      setHeartbeat({
+        bpm: message.bpm,
+        timestamp: message.at
+      })
       
       console.debug('[s]', `health update:`, message)
     }
