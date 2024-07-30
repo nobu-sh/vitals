@@ -26,7 +26,7 @@ function toRelativeTime(timestamp: number, currentDate = Date.now()) {
   } else if (diff < 30 * 24 * 60 * 60 * 1000) {
     return `${Math.floor(diff / 1000 / 60 / 60 / 24 / 7)}w`;
   } else if (diff < 365 * 24 * 60 * 60 * 1000) {
-    return `${Math.floor(diff / 1000 / 60 / 60 / 24 / 30)}m`;
+    return `${Math.floor(diff / 1000 / 60 / 60 / 24 / 30)}mo`;
   } else {
     return `${Math.floor(diff / 1000 / 60 / 60 / 24 / 365)}y`;
   }
@@ -118,80 +118,6 @@ export default function Client() {
     };
   }, [dead, heartbeat, muted])
 
-  // // Handles the audio with requestAnimationFrame and setInterval fallback
-  // useEffect(() => {
-  //   if (!audioBufferRef.current || !audioContextRef.current) return;
-  //   const audioContext = audioContextRef.current;
-  //   const audioBuffer = audioBufferRef.current;
-  //   let nextHeartbeat = performance.now() + (60 / heartbeat.bpm) * 1000;
-
-    // function playHeartbeatSound() {
-    //   try {
-    //     const source = audioContext.createBufferSource();
-    //     source.buffer = audioBuffer;
-    //     source.connect(audioContext.destination);
-    //     source.start(0);
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // }
-
-    // function update() {
-    //   const currentTime = performance.now();
-    //   if (currentTime >= nextHeartbeat) {
-    //     playHeartbeatSound();
-    //     nextHeartbeat += (60 / heartbeat.bpm) * 1000;
-    //   }
-    //   if (!muted && !dead) {
-    //     animationFrameRef.current = requestAnimationFrame(update);
-    //   }
-    // }
-
-  //   function fallbackUpdate() {
-  //     const currentTime = Date.now();
-  //     if (currentTime >= nextHeartbeat) {
-  //       playHeartbeatSound();
-  //       nextHeartbeat += (60 / heartbeat.bpm) * 1000;
-  //     }
-  //   }
-
-  //   if (!muted && !dead) {
-  //     audioContext.resume().then(() => {
-  //       if (document.hidden) {
-  //         intervalRef.current = window.setInterval(fallbackUpdate, (60 / heartbeat.bpm) * 1000);
-  //       } else {
-  //         animationFrameRef.current = requestAnimationFrame(update);
-  //       }
-  //     });
-  //   }
-
-  //   function handleVisibilityChange() {
-  //     if (document.hidden) {
-  //       if (animationFrameRef.current) {
-  //         cancelAnimationFrame(animationFrameRef.current);
-  //       }
-  //       intervalRef.current = window.setInterval(fallbackUpdate, (60 / heartbeat.bpm) * 1000);
-  //     } else {
-  //       if (intervalRef.current) {
-  //         clearInterval(intervalRef.current);
-  //       }
-  //       animationFrameRef.current = requestAnimationFrame(update);
-  //     }
-  //   }
-
-  //   document.addEventListener('visibilitychange', handleVisibilityChange);
-
-  //   return () => {
-  //     if (animationFrameRef.current) {
-  //       cancelAnimationFrame(animationFrameRef.current);
-  //     }
-  //     if (intervalRef.current) {
-  //       clearInterval(intervalRef.current);
-  //     }
-  //     document.removeEventListener('visibilitychange', handleVisibilityChange);
-  //   };
-  // }, [dead, heartbeat, muted]);
-
   return (
     <main className="relative flex min-h-screen w-full justify-center items-center py-20 overflow-hidden">
       {muted ? (
@@ -216,7 +142,7 @@ export default function Client() {
           I am possibly dead..?
         </h1>
         <Heart
-          className={`${styles.Heart} sm:w-[20rem] sm:h-[20rem] w-[10rem] h-[10rem] mt-[1.2rem] relative z-20`}
+          className={`${dead ? styles.HeartDead : styles.Heart} sm:w-[20rem] sm:h-[20rem] w-[10rem] h-[10rem] mt-[1.2rem] relative z-20`}
           style={{
             animationDuration: `${(60 / heartbeat.bpm).toFixed(2)}s`,
           }}
