@@ -54,7 +54,7 @@ export default function Client() {
 
   // Handles dead state
   useEffect(() => {
-    setDead(heartbeat.timestamp < date - 12 * 60 * 60 * 1000);
+    setDead(heartbeat.timestamp < date - 7 * 24 * 60 * 60 * 1000);
   }, [heartbeat, date]);
 
   // Initialize AudioContext and load audio buffer
